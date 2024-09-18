@@ -45,6 +45,7 @@ import { db } from "@/config/db";
 import { StoryData } from "@/config/schema";
 import { uuid } from "uuidv4";
 import StoryMidal from "@/components/custom/StoryModal";
+import axios from "axios";
 
 export const description =
   "An AI playground with a sidebar navigation and a main content area. The playground has a header with a settings drawer and a share button. The sidebar has navigation links and a user menu. The main content area shows a form to configure the model and messages.";
@@ -69,7 +70,20 @@ export default function StoryInputs() {
 `;
       const response = await chatSession.sendMessage(promet);
       setfinalPrmot(response?.response?.text());
-      await saveINDB(response?.response?.text());
+      const story = JSON.parse(response?.response?.text());
+      try {
+        const imageResponse = await axios.post("/api/generate-image", {
+          prompt:
+            "Add text with title" +
+            story?.story_cover.title +
+            "in bold text for book cover ," +
+            story?.story_cover?.image_prompt,
+        });
+        console.log(imageResponse?.data);
+      } catch (error) {
+        console.log("The image model error is ", error);
+      }
+      // await saveINDB(response?.response?.text());
       setStoryLoader(false);
     } catch (error) {
       console.log("The error with Gemni ", error);
@@ -148,7 +162,7 @@ export default function StoryInputs() {
             </Select>
           </div>
           {/* {storyType} {storyUser} {storyTitle} {storyContent} {storyImage} */}
-          {/* {"  "}6{finalPrmot} */}
+          {"  "}6{finalPrmot}
           <div className="grid gap-3">
             <Label htmlFor="role">Kids</Label>
             <Select
