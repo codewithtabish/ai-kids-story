@@ -21,6 +21,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import { Button as NextUIButton } from "@nextui-org/button";
 
 import {
   Select,
@@ -39,6 +40,11 @@ import {
   storyUsersList,
 } from "@/static/storiesListsData";
 import { useState } from "react";
+import { chatSession } from "@/config/gemni-ai";
+import { db } from "@/config/db";
+import { StoryData } from "@/config/schema";
+import { uuid } from "uuidv4";
+import StoryMidal from "@/components/custom/StoryModal";
 
 export const description =
   "An AI playground with a sidebar navigation and a main content area. The playground has a header with a settings drawer and a share button. The sidebar has navigation links and a user menu. The main content area shows a form to configure the model and messages.";
@@ -49,11 +55,47 @@ export default function StoryInputs() {
   const [storyTitle, setStoryTitle] = useState<string>();
   const [storyContent, setStoryContent] = useState<string>();
   const [storyImage, setStoryImage] = useState<string>(storyImageList[0].label);
+  const [finalPrmot, setfinalPrmot] = useState<any>();
+  const [storyLoader, setStoryLoader] = useState(false);
   const handleGenerateStory = async () => {
     if (!storyTitle || !storyContent) {
       return alert("please fill all the fields");
     }
-    console.log({ storyContent, storyTitle, storyImage, storyUser, storyType });
+    try {
+      setStoryLoader(true);
+      const promet = `create kids story on description for ${storyUser},${storyType},and all images in ${storyImage}:
+ ${storyTitle} ,give me 5 chapters, with detailed image text promt for each of
+ chapter and image promt for story cover book with story name,all in json format
+`;
+      const response = await chatSession.sendMessage(promet);
+      setfinalPrmot(response?.response?.text());
+      await saveINDB(response?.response?.text());
+      setStoryLoader(false);
+    } catch (error) {
+      console.log("The error with Gemni ", error);
+      setStoryLoader(false);
+    } finally {
+      setStoryLoader(false);
+    }
+  };
+  const saveINDB = async (output: any) => {
+    try {
+      const storyID = uuid();
+      const response = await db
+        .insert(StoryData)
+        .values({
+          storyTitle: storyTitle,
+          storyID: storyID,
+          storyAgeGroup: storyUser,
+          storyImageStyle: storyImage,
+          storySubject: storyContent,
+          output: JSON.parse(output),
+        })
+        .returning({ storyID: StoryData.storyID });
+      console.log("The response from DB is ", response);
+    } catch (error) {
+      console.log("The error with saving in DB IS  ", error);
+    }
   };
   return (
     <div className="grid min-h-screen w-full pl-[56px] py-16">
@@ -105,7 +147,8 @@ export default function StoryInputs() {
               </SelectContent>
             </Select>
           </div>
-          {storyType} {storyUser} {storyTitle} {storyContent} {storyImage}
+          {/* {storyType} {storyUser} {storyTitle} {storyContent} {storyImage} */}
+          {/* {"  "}6{finalPrmot} */}
           <div className="grid gap-3">
             <Label htmlFor="role">Kids</Label>
             <Select
@@ -191,14 +234,17 @@ export default function StoryInputs() {
         </fieldset>
       </form>
       <div className="flex justify-center items-center my-6">
-        <Button
+        <NextUIButton
+          isDisabled={storyLoader}
+          color="primary"
           className="dark:text-white w-1/2"
           size={"lg"}
           onClick={handleGenerateStory}
         >
           Create Story
-        </Button>
+        </NextUIButton>
       </div>
+      <StoryMidal loader={storyLoader} />
     </div>
   );
 }
