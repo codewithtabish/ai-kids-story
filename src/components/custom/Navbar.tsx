@@ -14,6 +14,8 @@ import Image from "next/image";
 import AppLogo from "../../../src/public/logo.svg";
 import { useState } from "react";
 import { ModeToggle } from "./ModeToggle";
+import { SignInButton, UserButton, useUser } from "@clerk/nextjs";
+import { BriefcaseBusiness, Heart } from "lucide-react";
 
 const navLinks = [
   {
@@ -33,12 +35,14 @@ const navLinks = [
 
   {
     label: "Blogs",
-    link: "/blogs",
+    link: "/blog",
     id: 4,
   },
 ];
 export default function AppHeader() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { isLoaded, user: authUser } = useUser();
+
   return (
     <Navbar maxWidth="lg" onMenuOpenChange={setIsMenuOpen}>
       <NavbarBrand>
@@ -64,9 +68,42 @@ export default function AppHeader() {
           <ModeToggle />
         </NavbarItem>
         <NavbarItem>
-          <Button as={Link} color="primary" href="#" variant="flat">
+          {/* <Button as={Link} color="primary" href="#" variant="flat">
             Login
-          </Button>
+          </Button> */}
+          <div className="sm:flex sm:gap-4 items-center">
+            {!isLoaded ? (
+              <div className="w-6 h-6 animate-spin transition-all rounded-md duration-500 spinner  border-gray-800 dark:border-gray-50 border-2"></div>
+            ) : authUser ? (
+              <UserButton>
+                <UserButton.MenuItems>
+                  <UserButton.Link
+                    label="Dashboard"
+                    labelIcon={<BriefcaseBusiness size={15} />}
+                    href="/dashboard"
+                  />
+                  <UserButton.Link
+                    label="Create Story"
+                    labelIcon={<Heart size={15} />}
+                    href="/create-story"
+                  />
+                  <UserButton.Link
+                    label="Create Blog"
+                    labelIcon={<Heart size={15} />}
+                    href="/create-blog"
+                  />
+                  <UserButton.Action label="manageAccount" />
+                </UserButton.MenuItems>
+              </UserButton>
+            ) : (
+              <Button className="dark:text-white">
+                <SignInButton
+                // signUpForceRedirectUrl={"/"}
+                // signUpFallbackRedirectUrl={"/"}
+                />
+              </Button>
+            )}
+          </div>
         </NavbarItem>
       </NavbarContent>
       <NavbarMenu>

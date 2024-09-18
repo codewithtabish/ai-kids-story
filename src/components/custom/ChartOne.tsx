@@ -42,7 +42,7 @@ const chartConfig = {
 
 export default function ChartOne() {
   return (
-    <Card className="bg-white dark:bg-gray-800">
+    <Card className="bg-white dark:bg-gray-800 dark:border-r-2 dark:border-r-gray-600">
       <CardHeader>
         <CardTitle>Bar Chart - Multiple</CardTitle>
         <CardDescription>January - June 2024</CardDescription>

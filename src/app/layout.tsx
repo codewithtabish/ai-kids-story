@@ -5,6 +5,8 @@ import { ThemeProvider } from "@/components/custom/theme-provider";
 import NextUIThemesProvider from "@/components/custom/NextUiProvider";
 import AppHeader from "@/components/custom/Navbar";
 import Footer from "@/components/custom/Footer";
+import { ClerkProvider } from "@clerk/nextjs";
+import { dark } from "@clerk/themes";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -28,25 +30,40 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="light"
-          enableSystem
-          disableTransitionOnChange
+    <ClerkProvider
+      publishableKey="pk_test_ZGFyaW5nLWFzcC02My5jbGVyay5hY2NvdW50cy5kZXYk"
+      // appearance={{
+      //   baseTheme: [dark, neobrutalism],
+      //   variables: { colorPrimary: "blue" },
+      //   signIn: {
+      //     baseTheme: [shadesOfPurple],
+      //     variables: { colorPrimary: "green" },
+      //   },
+      // }}
+      appearance={{
+        baseTheme: [dark],
+      }}
+    >
+      <html lang="en">
+        <body
+          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
-          <NextUIThemesProvider>
-            <div className="bg-gray-100 dark:bg-gray-800  min-h-screen text-gray-800 dark:text-gray-100 ">
-              <AppHeader />
-              <div className="max-w-6xl min-h-screen mx-auto">{children}</div>
-              <Footer />
-            </div>
-          </NextUIThemesProvider>
-        </ThemeProvider>
-      </body>
-    </html>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="light"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <NextUIThemesProvider>
+              <div className="bg-gray-100 dark:bg-gray-800  min-h-screen text-gray-800 dark:text-gray-100 ">
+                <AppHeader />
+                <div className="max-w-6xl min-h-screen mx-auto">{children}</div>
+                <Footer />
+              </div>
+            </NextUIThemesProvider>
+          </ThemeProvider>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }

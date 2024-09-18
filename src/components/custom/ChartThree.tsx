@@ -56,7 +56,7 @@ const chartConfig = {
 
 export default function ChartThree() {
   return (
-    <Card className="flex flex-col">
+    <Card className="bg-white dark:bg-gray-800 ">
       <CardHeader className="items-center pb-0">
         <CardTitle>Radial Chart - Grid</CardTitle>
         <CardDescription>January - June 2024</CardDescription>
