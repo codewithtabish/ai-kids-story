@@ -1,5 +1,6 @@
 import Image from "next/image";
 import React from "react";
+import AppLogo from "../../../src/public/logo.svg";
 
 const Footer = () => {
   return (
@@ -12,7 +13,7 @@ const Footer = () => {
                 alt="logo-footer image"
                 width={200}
                 height={200}
-                src="./logo.svg"
+                src={AppLogo}
                 className="w-10 h-10 text-white p-2 bg-indigo-500 rounded-full"
               />
               <span className="ml-3 text-xl">Get Hired</span>

@@ -3,10 +3,12 @@ import localFont from "next/font/local";
 import "./globals.css";
 import { ThemeProvider } from "@/components/custom/theme-provider";
 import NextUIThemesProvider from "@/components/custom/NextUiProvider";
-import AppHeader from "@/components/custom/Navbar";
+// import AppHeader from "@/components/custom/Navbar";
 import Footer from "@/components/custom/Footer";
 import { ClerkProvider } from "@clerk/nextjs";
 import { dark } from "@clerk/themes";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import HeaderTwo from "@/components/custom/Header";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -31,7 +33,7 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider
-      publishableKey="pk_test_ZGFyaW5nLWFzcC02My5jbGVyay5hY2NvdW50cy5kZXYk"
+      // publishableKey="pk_test_d2FybS1zdHVkLTI0LmNsZXJrLmFjY291bnRzLmRldiQ"
       // appearance={{
       //   baseTheme: [dark, neobrutalism],
       //   variables: { colorPrimary: "blue" },
@@ -56,8 +58,11 @@ export default function RootLayout({
           >
             <NextUIThemesProvider>
               <div className="bg-gray-100 dark:bg-gray-800  min-h-screen text-gray-800 dark:text-gray-100 ">
-                <AppHeader />
-                <div className="max-w-6xl min-h-screen mx-auto">{children}</div>
+                <HeaderTwo />
+                {/* <AppHeader /> */}
+                <div className="max-w-6xl min-h-screen mx-auto">
+                  <TooltipProvider>{children}</TooltipProvider>
+                </div>
                 <Footer />
               </div>
             </NextUIThemesProvider>

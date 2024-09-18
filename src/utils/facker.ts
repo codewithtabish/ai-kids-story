@@ -11,7 +11,7 @@ export const generateTestimonials = (count = 10) => {
       : "https://avatar.iran.liara.run/public/girl";
 
     const testimonial = {
-      id: Math.round(10),
+      id: Math.random() * 100,
       name: faker.person.fullName(),
       title: faker.person.jobTitle(),
       company: faker.company.name(),
@@ -38,7 +38,7 @@ export const generateBlogComments = (count = 10) => {
       : "https://avatar.iran.liara.run/public/girl";
 
     const comment = {
-      id: i + 1, // assuming id is serial and starts from 1
+      id: Math.random() * 100, // assuming id is serial and starts from 1
       postId: postId || Math.random(), // Generate a postId if not provided
       commenterName: faker.name.fullName(),
       comment: faker.lorem.sentences(2), // Generates exactly 2 sentences for the comment
