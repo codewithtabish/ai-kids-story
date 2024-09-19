@@ -61,7 +61,7 @@ export default function RootLayout({
               <div className="bg-gray-100 dark:bg-gray-800  min-h-screen text-gray-800 dark:text-gray-100 ">
                 <HeaderTwo />
                 {/* <AppHeader /> */}
-                <div className="max-w-6xl min-h-screen mx-auto">
+                <div className=" min-h-screen mx-auto">
                   <TooltipProvider>{children}</TooltipProvider>
                   <Toaster />
                 </div>

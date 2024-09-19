@@ -84,7 +84,10 @@ export default function StoryInputs() {
 `;
       const response = await chatSession.sendMessage(promet);
       setfinalPrmot(response?.response?.text());
-      const story = JSON.parse(response?.response?.text());
+      let story: any;
+      if (response) {
+        story = JSON.parse(response?.response?.text());
+      }
       try {
         const imageResponse = await axios.post("/api/generate-image", {
           prompt:
@@ -110,10 +113,10 @@ export default function StoryInputs() {
       console.log("The error with Gemni ", error);
       setStoryLoader(false);
     } finally {
-      toast({
-        title: "OH ! Story created .",
-        description: "Story added in DB 💞💞 .",
-      });
+      // toast({
+      //   title: "OH ! Story created .",
+      //   description: "Story added in DB 💞💞 .",
+      // });
       setStoryLoader(false);
     }
   };
@@ -137,6 +140,10 @@ export default function StoryInputs() {
         .returning({ storyID: StoryData.storyID });
       setSavedStoryID(response[0]?.storyID);
       router.replace("/view-story/" + response[0]?.storyID);
+      toast({
+        title: "OH ! Story created .",
+        description: "Story added in DB 💞💞 .",
+      });
 
       console.log("The response from DB is ", response);
     } catch (error) {
@@ -193,6 +200,7 @@ export default function StoryInputs() {
               </SelectContent>
             </Select>
           </div>
+          {finalPrmot}
           {/* {storyType} {storyUser} {storyTitle} {storyContent} {storyImage} */}
           {/* {"  "}6{savedStoryID} */}
           <div className="grid gap-3">

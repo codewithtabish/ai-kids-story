@@ -3,7 +3,7 @@ import StoryInputs from "./_components/story-inputs";
 
 const page = () => {
   return (
-    <div>
+    <div className="max-w-6xl mx-auto">
       <div className="my-8 pt-16 px-5  ">
         <h1 className="md:text-4xl text-2xl font-bold text-gray-800 dark:text-gray-200">
           Create Your Own AI-Generated Story

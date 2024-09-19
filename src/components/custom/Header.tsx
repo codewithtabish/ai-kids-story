@@ -10,6 +10,8 @@ const HeaderTwo = () => {
   // State to track if the header should be sticky
   const [isSticky, setIsSticky] = useState(false);
   const { isLoaded, isSignedIn, user: authUser } = useUser();
+  const pathName = usePathname();
+  console.log(pathName);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -32,6 +34,10 @@ const HeaderTwo = () => {
   if (authUser) {
     console.log("The current last user is ", authUser);
   }
+  if (pathName.startsWith("/dashboard")) {
+    // return <DashBoardHeaders />;
+    return;
+  }
 
   return (
     <header
@@ -41,7 +47,7 @@ const HeaderTwo = () => {
           : "relative"
       }`}
     >
-      {/* {JSON.stringify(pathname)} */}
+      {pathName}
       <div className="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           <div className="md:flex md:items-center md:gap-12">

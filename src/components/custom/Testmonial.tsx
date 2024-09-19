@@ -18,7 +18,7 @@ const Testmonial = () => {
   // );
 
   return (
-    <div className="pb-2">
+    <div className="pb-2 max-w-6xl mx-auto">
       <section className="">
         <h2 className=" text-4xl font-bold tracking-tight  sm:text-3xl px-5 md:px-0 ">
           Read trusted reviews from our customers
