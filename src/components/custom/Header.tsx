@@ -3,15 +3,16 @@ import React, { useState, useEffect } from "react";
 import { SignIn, SignInButton, UserButton, useUser } from "@clerk/nextjs";
 import { Button } from "../ui/button";
 import Link from "next/link";
-import { BriefcaseBusiness, Heart } from "lucide-react";
+import { BriefcaseBusiness, Coins, Heart } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { ModeToggle } from "./ModeToggle";
+import { useUserContext } from "@/context/UserContext";
 const HeaderTwo = () => {
   // State to track if the header should be sticky
   const [isSticky, setIsSticky] = useState(false);
   const { isLoaded, isSignedIn, user: authUser } = useUser();
   const pathName = usePathname();
-  console.log(pathName);
+  const { userInfo, setuserInfo } = useUserContext();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -47,7 +48,7 @@ const HeaderTwo = () => {
           : "relative"
       }`}
     >
-      {pathName}
+      {/* {pathName} {userInfo?.credits} */}
       <div className="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           <div className="md:flex md:items-center md:gap-12">
@@ -126,6 +127,13 @@ const HeaderTwo = () => {
           </div>
 
           <div className="flex items-center gap-4">
+            {authUser && (
+              <div className="flex flex-row gap-1 items-center cursor-pointer">
+                <Coins className="w-8 h-8 text-orange-800" />
+                <p>{userInfo?.credits}</p>
+              </div>
+            )}
+
             <div className="sm:flex sm:gap-4 items-center">
               <ModeToggle />
               {!isLoaded ? (

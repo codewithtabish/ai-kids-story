@@ -1,4 +1,5 @@
 import {
+  integer,
   json,
   pgTable,
   PgVarchar,
@@ -24,3 +25,11 @@ export const StoryData = pgTable("storyData", {
 // create kids story on description for 5-8 years kids,Educational story,and all images in paper cut style:
 // story of programmer and a magical laptop ,give me 5 chapters, with detailed image text promt for each of
 // chapter and image promt for story cover book with story name,all in json format
+
+export const Users = pgTable("Users", {
+  id: serial("id").primaryKey(),
+  userName: varchar("userName"),
+  userEmail: varchar("userEmail"),
+  userImage: varchar("userImage"),
+  credits: integer("credits").default(3),
+});

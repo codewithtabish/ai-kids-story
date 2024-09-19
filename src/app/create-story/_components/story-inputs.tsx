@@ -42,7 +42,7 @@ import {
 import { useState } from "react";
 import { chatSession } from "@/config/gemni-ai";
 import { db } from "@/config/db";
-import { StoryData } from "@/config/schema";
+import { StoryData, Users } from "@/config/schema";
 import { uuid } from "uuidv4";
 import StoryMidal from "@/components/custom/StoryModal";
 import axios from "axios";
@@ -50,6 +50,8 @@ import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
 import { ToastAction } from "@/components/ui/toast";
+import { useUserContext } from "@/context/UserContext";
+import { eq } from "drizzle-orm";
 
 export const description =
   "An AI playground with a sidebar navigation and a main content area. The playground has a header with a settings drawer and a share button. The sidebar has navigation links and a user menu. The main content area shows a form to configure the model and messages.";
@@ -66,16 +68,26 @@ export default function StoryInputs() {
   const [savedStoryID, setSavedStoryID] = useState<any>();
   const router = useRouter();
   const { toast } = useToast();
+  const { userInfo, setuserInfo } = useUserContext();
 
   const handleGenerateStory = async () => {
+    if (userInfo?.credits <= 1) {
+      return toast({
+        variant: "destructive",
+        title: "Uh oh! please update your coins .",
+        description: "There was a problem with your request.",
+        action: <ToastAction altText="Try again">Try again</ToastAction>,
+      });
+    }
     if (!storyTitle || !storyContent) {
-      toast({
+      return toast({
         variant: "destructive",
         title: "Uh oh! please enter all fields.",
         description: "There was a problem with your request.",
         action: <ToastAction altText="Try again">Try again</ToastAction>,
       });
     }
+
     try {
       setStoryLoader(true);
       const promet = `create kids story on description for ${storyUser},${storyType},and all images in ${storyImage}:
@@ -140,6 +152,7 @@ export default function StoryInputs() {
         .returning({ storyID: StoryData.storyID });
       setSavedStoryID(response[0]?.storyID);
       router.replace("/view-story/" + response[0]?.storyID);
+      updateUserCredits();
       toast({
         title: "OH ! Story created .",
         description: "Story added in DB 💞💞 .",
@@ -148,6 +161,32 @@ export default function StoryInputs() {
       console.log("The response from DB is ", response);
     } catch (error) {
       console.log("The error with saving in DB IS  ", error);
+    }
+  };
+
+  const updateUserCredits = async () => {
+    try {
+      const response = await db
+        .update(Users)
+        .set({
+          credits: Number(userInfo?.credits - 1),
+        })
+        .where(
+          eq(
+            Users?.userEmail,
+            authUser?.primaryEmailAddress?.emailAddress || ""
+          )
+        )
+        .returning({
+          userImage: Users?.userImage,
+          userEmail: Users?.userEmail,
+          userName: Users?.userName,
+          credits: Users?.credits,
+        });
+      console.log("Here data is of updating yser is ", response);
+      setuserInfo(response[0]);
+    } catch (error) {
+      console.log("The error while Updating user is ", error);
     }
   };
   return (

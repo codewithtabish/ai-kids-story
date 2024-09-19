@@ -10,6 +10,7 @@ import { dark } from "@clerk/themes";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import HeaderTwo from "@/components/custom/Header";
 import { Toaster } from "@/components/ui/toaster";
+import UserContextProvider from "@/context/UserContext";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -59,13 +60,15 @@ export default function RootLayout({
           >
             <NextUIThemesProvider>
               <div className="bg-gray-100 dark:bg-gray-800  min-h-screen text-gray-800 dark:text-gray-100 ">
-                <HeaderTwo />
-                {/* <AppHeader /> */}
-                <div className=" min-h-screen mx-auto">
-                  <TooltipProvider>{children}</TooltipProvider>
-                  <Toaster />
-                </div>
-                <Footer />
+                <UserContextProvider>
+                  <HeaderTwo />
+                  {/* <AppHeader /> */}
+                  <div className=" min-h-screen mx-auto">
+                    <TooltipProvider>{children}</TooltipProvider>
+                    <Toaster />
+                  </div>
+                  <Footer />
+                </UserContextProvider>
               </div>
             </NextUIThemesProvider>
           </ThemeProvider>
