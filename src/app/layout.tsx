@@ -9,6 +9,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 import { dark } from "@clerk/themes";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import HeaderTwo from "@/components/custom/Header";
+import { Toaster } from "@/components/ui/toaster";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -62,6 +63,7 @@ export default function RootLayout({
                 {/* <AppHeader /> */}
                 <div className="max-w-6xl min-h-screen mx-auto">
                   <TooltipProvider>{children}</TooltipProvider>
+                  <Toaster />
                 </div>
                 <Footer />
               </div>

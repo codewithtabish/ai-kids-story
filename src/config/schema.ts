@@ -14,8 +14,10 @@ export const StoryData = pgTable("storyData", {
   storyID: varchar("storyID"),
   storyAgeGroup: varchar("storyAgeGroup"),
   storyImageStyle: varchar("storyImageStyle"),
-  //   storyBannerImage: varchar("storyBannerImage"),
   storyCoverImage: varchar("storyCoverImage"),
+  userName: varchar("userName"),
+  userEmail: varchar("userEmail"),
+  userImage: varchar("userImage"),
   output: json("output"),
 });
 

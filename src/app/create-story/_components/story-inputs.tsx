@@ -46,6 +46,10 @@ import { StoryData } from "@/config/schema";
 import { uuid } from "uuidv4";
 import StoryMidal from "@/components/custom/StoryModal";
 import axios from "axios";
+import { useUser } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
+import { useToast } from "@/hooks/use-toast";
+import { ToastAction } from "@/components/ui/toast";
 
 export const description =
   "An AI playground with a sidebar navigation and a main content area. The playground has a header with a settings drawer and a share button. The sidebar has navigation links and a user menu. The main content area shows a form to configure the model and messages.";
@@ -58,9 +62,19 @@ export default function StoryInputs() {
   const [storyImage, setStoryImage] = useState<string>(storyImageList[0].label);
   const [finalPrmot, setfinalPrmot] = useState<any>();
   const [storyLoader, setStoryLoader] = useState(false);
+  const { isLoaded, isSignedIn, user: authUser } = useUser();
+  const [savedStoryID, setSavedStoryID] = useState<any>();
+  const router = useRouter();
+  const { toast } = useToast();
+
   const handleGenerateStory = async () => {
     if (!storyTitle || !storyContent) {
-      return alert("please fill all the fields");
+      toast({
+        variant: "destructive",
+        title: "Uh oh! please enter all fields.",
+        description: "There was a problem with your request.",
+        action: <ToastAction altText="Try again">Try again</ToastAction>,
+      });
     }
     try {
       setStoryLoader(true);
@@ -80,19 +94,30 @@ export default function StoryInputs() {
             story?.story_cover?.image_prompt,
         });
         console.log(imageResponse?.data);
+        const savedImageResponse = await axios.post("/api/save-image", {
+          url: imageResponse?.data?.imageUrl,
+        });
+        await saveINDB(
+          response?.response?.text(),
+          savedImageResponse?.data?.downloadURL
+        );
       } catch (error) {
         console.log("The image model error is ", error);
       }
-      // await saveINDB(response?.response?.text());
+
       setStoryLoader(false);
     } catch (error) {
       console.log("The error with Gemni ", error);
       setStoryLoader(false);
     } finally {
+      toast({
+        title: "OH ! Story created .",
+        description: "Story added in DB 💞💞 .",
+      });
       setStoryLoader(false);
     }
   };
-  const saveINDB = async (output: any) => {
+  const saveINDB = async (output: any, bannerImage: string) => {
     try {
       const storyID = uuid();
       const response = await db
@@ -104,8 +129,15 @@ export default function StoryInputs() {
           storyImageStyle: storyImage,
           storySubject: storyContent,
           output: JSON.parse(output),
+          storyCoverImage: bannerImage,
+          userEmail: authUser?.primaryEmailAddress?.emailAddress,
+          userName: authUser?.fullName,
+          userImage: authUser?.imageUrl,
         })
         .returning({ storyID: StoryData.storyID });
+      setSavedStoryID(response[0]?.storyID);
+      router.replace("/view-story/" + response[0]?.storyID);
+
       console.log("The response from DB is ", response);
     } catch (error) {
       console.log("The error with saving in DB IS  ", error);
@@ -162,7 +194,7 @@ export default function StoryInputs() {
             </Select>
           </div>
           {/* {storyType} {storyUser} {storyTitle} {storyContent} {storyImage} */}
-          {"  "}6{finalPrmot}
+          {/* {"  "}6{savedStoryID} */}
           <div className="grid gap-3">
             <Label htmlFor="role">Kids</Label>
             <Select
