@@ -89,7 +89,9 @@ const HeaderTwo = () => {
 
                 <li>
                   <Link
-                    className="text-gray-500 transition hover:text-gray-500/75"
+                    className={`text-gray-500 transition hover:text-gray-500/75 ${
+                      pathName == "/stories" && "font-bold"
+                    }`}
                     href="/stories"
                   >
                     {" "}
@@ -99,7 +101,9 @@ const HeaderTwo = () => {
 
                 <li>
                   <Link
-                    className="text-gray-500 transition hover:text-gray-500/75"
+                    className={` text-gray-500 transition hover:text-gray-500/75   ${
+                      pathName == "/stories" && "font-bold"
+                    }`}
                     href="/create-story"
                   >
                     {" "}
@@ -109,7 +113,9 @@ const HeaderTwo = () => {
 
                 <li>
                   <Link
-                    className="text-gray-500 transition hover:text-gray-500/75"
+                    className={` text-gray-500 transition hover:text-gray-500/75   ${
+                      pathName == "/services" && "font-bold"
+                    }`}
                     href="/services"
                   >
                     {" "}
@@ -119,7 +125,9 @@ const HeaderTwo = () => {
 
                 <li>
                   <Link
-                    className="text-gray-500 transition hover:text-gray-500/75"
+                    className={` text-gray-500 transition hover:text-gray-500/75   ${
+                      pathName == "/blog" && "font-bold"
+                    }`}
                     href="/blog"
                   >
                     {" "}
