@@ -2,12 +2,17 @@
 import { db } from "@/config/db";
 import { StoryData } from "@/config/schema";
 import { eq } from "drizzle-orm";
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import HTMLFlipBook from "react-pageflip";
-import { FaArrowLeft, FaArrowRight } from "react-icons/fa"; // Import icons
+import {
+  FaArrowLeft,
+  FaArrowRight,
+  FaFacebookF,
+  FaTwitter,
+  FaLinkedinIn,
+} from "react-icons/fa"; // Import icons
 import BookCoverImage from "./_components/BookCoverImage";
 import StoryPages from "./_components/StoryPages";
-import { FaFacebookF, FaTwitter, FaLinkedinIn } from "react-icons/fa";
 import AppLoader from "@/components/custom/AppLoader";
 
 type Props = {
@@ -21,17 +26,18 @@ const Page = ({ params }: Props) => {
   const bookRef = useRef<any>(null); // Reference to HTMLFlipBook
   const [currentPage, setCurrentPage] = useState(0); // Track the current page
 
-  const getSingleStory = async () => {
+  // Memoized version of the getSingleStory function
+  const getSingleStory = useCallback(async () => {
     const response = await db
       .select()
       .from(StoryData)
       .where(eq(StoryData.storyID, params?.storyId));
     setStory(response[0]);
-  };
+  }, [params?.storyId]);
 
   useEffect(() => {
     getSingleStory();
-  }, [params.storyId]);
+  }, [getSingleStory]);
 
   if (!story) {
     return <AppLoader />;
@@ -60,7 +66,7 @@ const Page = ({ params }: Props) => {
         </div>
 
         <div className="md:max-w-4xl mx-auto py-5 flex flex-col items-center">
-          {/* @ts-ignore */}
+          {/* @ts-expect-error: HTMLFlipBook is a third-party library that may not have full TypeScript support */}
           <HTMLFlipBook
             width={300}
             height={400}
@@ -114,7 +120,6 @@ const Page = ({ params }: Props) => {
                 </p>
               </div>
 
-              {/* Share Section */}
               {/* Share Section */}
               <div className="mt-5 flex space-x-6 justify-center items-center">
                 <a

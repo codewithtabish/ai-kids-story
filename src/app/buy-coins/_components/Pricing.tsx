@@ -5,16 +5,16 @@ import { Button } from "@/components/ui/button";
 import AppLoader from "@/components/custom/AppLoader";
 import { useRouter } from "next/navigation";
 import { db } from "@/config/db";
-import { StoryData, Users } from "@/config/schema";
+import { Users } from "@/config/schema";
 import { eq } from "drizzle-orm";
 import { useUser } from "@clerk/nextjs";
 import { useUserContext } from "@/context/UserContext";
 
 const Pricing = () => {
-  const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
+  const [selectedPlan] = useState<string | null>(null);
   const [paymentLoader, setpaymentLoader] = useState<boolean>(false);
   const router = useRouter();
-  const { isLoaded, isSignedIn, user: authUser } = useUser();
+  const { isLoaded, user: authUser } = useUser();
   const { userInfo, setuserInfo } = useUserContext();
 
   const plans = [
@@ -52,9 +52,7 @@ const Pricing = () => {
         router.replace("/");
       }
       // console.log("The payment response is ", response[0]);
-    } catch (error) {
-      console.log("object");
-    }
+    } catch (error) {}
   };
   if (paymentLoader) {
     return <AppLoader />;

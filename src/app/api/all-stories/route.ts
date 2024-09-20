@@ -1,8 +1,7 @@
 import { db } from "@/config/db";
 import { StoryData } from "@/config/schema";
-import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(req: NextRequest) {
+export async function GET() {
   try {
     const response = await db.select().from(StoryData).limit(5);
     const storyList = response;

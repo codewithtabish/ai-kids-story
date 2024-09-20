@@ -1,26 +1,8 @@
 "use client";
-import {
-  Bird,
-  Book,
-  Bot,
-  Code2,
-  CornerDownLeft,
-  LifeBuoy,
-  Mic,
-  Paperclip,
-  Rabbit,
-  Settings,
-  Settings2,
-  Share,
-  SquareTerminal,
-  SquareUser,
-  Triangle,
-  Turtle,
-} from "lucide-react";
+import { Rabbit } from "lucide-react";
 
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
 import { Button as NextUIButton } from "@nextui-org/button";
 
 import {

@@ -1,5 +1,4 @@
 "use client";
-import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 import React from "react";
 
 const layout = ({ children }: { children: React.ReactNode }) => {

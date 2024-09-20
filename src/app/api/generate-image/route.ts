@@ -20,7 +20,6 @@ export async function POST(req: NextRequest) {
     const output: any = await replicate.run("black-forest-labs/flux-schnell", {
       input,
     });
-    console.log(output);
     //=> ["https://replicate.delivery/yhqm/A8gbZlebANWBFSU1mTWSznU...
     return NextResponse.json({ imageUrl: output[0] });
   } catch (error) {

@@ -3,7 +3,10 @@ import Link from "next/link";
 
 export default function SingleStory({ story }: any) {
   return (
-    <Card className="py-4 dark:bg-gray-800 hover:scale-105 transition-all duration-500 cursor-pointer">
+    <Card
+      className="py-4 dark:bg-gray-800 hover:scale-105 transition-all duration-500 cursor-pointer"
+      key={story?.storyID}
+    >
       <CardBody className="overflow-visible py-2">
         <Link href={"/view-story/" + story?.storyID}>
           <Image

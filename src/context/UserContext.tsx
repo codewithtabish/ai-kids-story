@@ -5,20 +5,13 @@ import { Users } from "@/config/schema";
 import { useUser } from "@clerk/nextjs";
 import { eq } from "drizzle-orm";
 import { createContext, useContext, useEffect, useState } from "react";
-
-const UserContent = createContext<any>(0);
-
 import React from "react";
+
+const UserContent = createContext<any>(null); // Changed default value from 0 to null
 
 const UserContextProvider = ({ children }: any) => {
   const { isLoaded, isSignedIn, user: authUser } = useUser();
-  const [userInfo, setuserInfo] = useState<any>();
-
-  useEffect(() => {
-    authUser && saveUserInDB();
-
-    return () => {};
-  }, [authUser]);
+  const [userInfo, setuserInfo] = useState<any>(null); // Changed initial state to null
 
   const saveUserInDB = async () => {
     try {
@@ -51,8 +44,16 @@ const UserContextProvider = ({ children }: any) => {
       } else {
         setuserInfo(checkUser[0]);
       }
-    } catch (error) {}
+    } catch (error) {
+      console.error(error); // Consider logging the error for better debugging
+    }
   };
+
+  useEffect(() => {
+    if (authUser) {
+      saveUserInDB();
+    }
+  }, [authUser, saveUserInDB]); // Added saveUserInDB to dependency array
 
   if (!isLoaded) {
     return <AppLoader />;

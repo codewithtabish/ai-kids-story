@@ -15,7 +15,7 @@ const RecommendedStories = async () => {
       </div>
       <div className="grid md:grid-cols-4 gap-5 items-center ">
         {storyList?.map((item: any, index: any) => {
-          return <SingleStory story={item} />;
+          return <SingleStory story={item} key={index} />;
         })}
       </div>
     </div>

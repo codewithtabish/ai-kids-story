@@ -8,7 +8,7 @@ import { desc } from "drizzle-orm";
 import { LoaderCircle } from "lucide-react";
 import React, { useEffect, useState } from "react";
 
-const page = () => {
+const Page = () => {
   const [storyList, setStoryList] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [offset, setOffset] = useState<number>(0);
@@ -73,4 +73,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;
