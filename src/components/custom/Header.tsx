@@ -7,6 +7,8 @@ import { BriefcaseBusiness, Coins, Heart } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { ModeToggle } from "./ModeToggle";
 import { useUserContext } from "@/context/UserContext";
+import { Badge } from "@/components/ui/badge";
+
 const HeaderTwo = () => {
   // State to track if the header should be sticky
   const [isSticky, setIsSticky] = useState(false);
@@ -76,7 +78,9 @@ const HeaderTwo = () => {
                 <li>
                   <Link
                     href={"/"}
-                    className="text-gray-500 transition hover:text-gray-500/75"
+                    className={`text-gray-500 transition hover:text-gray-500/75 ${
+                      pathName == "/" && "font-bold"
+                    }`}
                   >
                     {" "}
                     Home{" "}
@@ -86,7 +90,7 @@ const HeaderTwo = () => {
                 <li>
                   <Link
                     className="text-gray-500 transition hover:text-gray-500/75"
-                    href="/courses"
+                    href="/stories"
                   >
                     {" "}
                     Stories{" "}
@@ -129,8 +133,18 @@ const HeaderTwo = () => {
           <div className="flex items-center gap-4">
             {authUser && (
               <div className="flex flex-row gap-1 items-center cursor-pointer">
-                <Coins className="w-8 h-8 text-orange-800" />
-                <p>{userInfo?.credits}</p>
+                {userInfo?.credits > 0 ? (
+                  <div className="flex gap-1 items-center">
+                    <Coins className="w-8 h-8 text-orange-800" />
+                    <p>{userInfo?.credits}</p>
+                  </div>
+                ) : (
+                  <div>
+                    <Link href={"/buy-coins"}>
+                      <Badge>Buy Coins</Badge>
+                    </Link>
+                  </div>
+                )}
               </div>
             )}
 
@@ -155,6 +169,11 @@ const HeaderTwo = () => {
                       label="Create Blog"
                       labelIcon={<Heart size={15} />}
                       href="/create-blog"
+                    />
+                    <UserButton.Link
+                      label="Buy Coins"
+                      labelIcon={<Heart size={15} />}
+                      href="/buy-coins"
                     />
                     <UserButton.Action label="manageAccount" />
                   </UserButton.MenuItems>
