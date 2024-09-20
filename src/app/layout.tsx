@@ -11,6 +11,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import HeaderTwo from "@/components/custom/Header";
 import { Toaster } from "@/components/ui/toaster";
 import UserContextProvider from "@/context/UserContext";
+import { Analytics } from "@vercel/analytics/react";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
