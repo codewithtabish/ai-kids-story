@@ -35,7 +35,6 @@ const HeaderTwo = () => {
     };
   }, []);
   if (authUser) {
-    console.log("The current last user is ", authUser);
   }
   if (pathName.startsWith("/dashboard")) {
     // return <DashBoardHeaders />;
@@ -102,7 +101,7 @@ const HeaderTwo = () => {
                 <li>
                   <Link
                     className={` text-gray-500 transition hover:text-gray-500/75   ${
-                      pathName == "/stories" && "font-bold"
+                      pathName == "/create-story" && "font-bold"
                     }`}
                     href="/create-story"
                   >
