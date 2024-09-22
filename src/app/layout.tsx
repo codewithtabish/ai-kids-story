@@ -66,6 +66,7 @@ export default function RootLayout({
                   {/* <AppHeader /> */}
                   <div className=" min-h-screen mx-auto">
                     <TooltipProvider>{children}</TooltipProvider>
+                    <Analytics />
                     <Toaster />
                   </div>
                   <Footer />
